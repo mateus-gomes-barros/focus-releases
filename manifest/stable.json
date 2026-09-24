@@ -1,0 +1,29 @@
+{
+  "channel": "stable",
+  "latest": {
+    "apkUrl": "https://github.com/mateus-gomes-barros/focus-releases/releases/download/v5.0.1/focus-5.0.1.apk",
+    "blocked": false,
+    "mandatory": false,
+    "minimumVersionCode": 5,
+    "notes": {
+      "en": [
+        "Focus Palm in-app updater.",
+        "Preparation for future updates through the app."
+      ],
+      "pt-BR": [
+        "Atualizador interno do Focus Palm.",
+        "Preparação para futuras atualizações pelo aplicativo."
+      ]
+    },
+    "publishedAt": "2026-09-24T05:53:10Z",
+    "releasePageUrl": "https://github.com/mateus-gomes-barros/focus-releases/releases/tag/v5.0.1",
+    "sha256": "7939e41fd29470b1ca0b659ab6418a9e93bdc1d8f8ff3665b9b5f35c7f5d8eb8",
+    "signingCertificateSha256": "66ef952ba112112325e03a5964f9b3102810cd22f3db50bdce796831cc943dab",
+    "sizeBytes": 4594371,
+    "versionCode": 50001,
+    "versionName": "5.0.1"
+  },
+  "packageName": "com.mateusgomes.focusapp",
+  "platform": "android",
+  "schemaVersion": 1
+}
