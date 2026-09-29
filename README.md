@@ -120,15 +120,12 @@ Os binários públicos ficam em **Releases** deste repositório:
 - [Focus Site](https://focus-website-seven.vercel.app/)
 - [Focus Web](https://pomodoro-1ktl-theta.vercel.app/)
 
-## Identidade oficial do Android
+## Verificação e segurança do Android
+
+Cada APK oficial do Focus Palm é distribuído por HTTPS, acompanhado por SHA-256 e assinado pelo certificado oficial do Focus. Antes da instalação de uma atualização, o aplicativo valida o arquivo, a identidade do app, a versão e a assinatura digital.
 
 - Package: `com.mateusgomes.focusapp`
-- Certificado de assinatura SHA-256: `66ef952ba112112325e03a5964f9b3102810cd22f3db50bdce796831cc943dab`
-- Canal de distribuição: `stable`
-
-Cada APK público é distribuído por HTTPS e acompanhado por SHA-256. Antes de abrir o instalador Android, o Focus valida arquivo, package, versão e certificado de assinatura.
-
-A release só passa a ser oferecida automaticamente quando o manifesto estável é atualizado. O manifesto é publicado por último.
+- Certificado SHA-256: `66ef952ba112112325e03a5964f9b3102810cd22f3db50bdce796831cc943dab`
 
 ## Instalação e segurança
 
