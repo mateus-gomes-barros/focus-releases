@@ -117,7 +117,7 @@ Os binários públicos ficam em **Releases** deste repositório:
 
 - [Ver todas as releases](../../releases)
 - [Focus Palm 6.0.0](../../releases/tag/v6.0.0)
-- [Focus Site](https://focus-website-seven.vercel.app/)
+- [Focus Site](https://site.focus-web.online/)
 - [Focus Web](https://focus-web.online/)
 
 ## Verificação e segurança do Android
