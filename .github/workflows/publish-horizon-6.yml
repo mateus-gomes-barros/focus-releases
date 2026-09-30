@@ -1,0 +1,96 @@
+name: Publish Focus Horizon 6.0 assets
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/publish-horizon-6.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download signed release artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL 'https://sdmntprbrazilsouth.oaiusercontent.com/files/00000000-3694-820e-9d77-91b2e91d70bc/raw?se=2026-09-30T05%3A30%3A23Z&sp=r&sv=2026-02-06&sr=b&scid=dcfc5bb5-bfbe-571a-aea2-7e442f1ac9e7&skoid=86ad43b0-1afa-4d46-a6d6-9e67f7cdc5bc&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-29T23%3A47%3A55Z&ske=2026-09-30T23%3A47%3A55Z&sks=b&skv=2026-02-06&sig=oF4jNTZu/bvhOaIlaEyNgsY4Da%2BtRAt7llJJKdLyrx8%3D' -o mac.zip
+          curl -fL 'https://sdmntprbrazilsouth.oaiusercontent.com/files/00000000-db28-820e-b759-0fe625e45242/raw?se=2026-09-30T05%3A30%3A26Z&sp=r&sv=2026-02-06&sr=b&scid=0fe98b1d-dcc4-5c1c-9775-272ca055e7da&skoid=86ad43b0-1afa-4d46-a6d6-9e67f7cdc5bc&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-30T02%3A54%3A02Z&ske=2026-10-01T02%3A54%3A02Z&sks=b&skv=2026-02-06&sig=wfET0WNFj0CetgYtX8rnQeTq4d1Di0lZTQk%2BdUQ5%2By0%3D' -o win.zip
+          mkdir -p mac win out
+          unzip -q mac.zip -d mac
+          unzip -q win.zip -d win
+
+          cp "$(find mac -type f -name 'Focus Horizon_6.0.0_aarch64.dmg' -print -quit)" "out/Focus.Horizon_6.0.0_aarch64.dmg"
+          cp "$(find mac -type f -name 'Focus Horizon.app.tar.gz' -print -quit)" "out/Focus.Horizon.app.tar.gz"
+          cp "$(find mac -type f -name 'Focus Horizon.app.tar.gz.sig' -print -quit)" "out/Focus.Horizon.app.tar.gz.sig"
+
+          cp "$(find win -type f -name 'Focus Horizon_6.0.0_x64-setup.exe' -print -quit)" "out/Focus.Horizon_6.0.0_x64-setup.exe"
+          cp "$(find win -type f -name 'Focus Horizon_6.0.0_x64-setup.exe.sig' -print -quit)" "out/Focus.Horizon_6.0.0_x64-setup.exe.sig"
+          cp "$(find win -type f -name 'Focus Horizon_6.0.0_x64_en-US.msi' -print -quit)" "out/Focus.Horizon_6.0.0_x64_en-US.msi"
+          cp "$(find win -type f -name 'Focus Horizon_6.0.0_x64_en-US.msi.sig' -print -quit)" "out/Focus.Horizon_6.0.0_x64_en-US.msi.sig"
+
+      - name: Generate updater manifest and checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, json
+
+          out = Path("out")
+          mac_tar = out / "Focus.Horizon.app.tar.gz"
+          mac_sig = (out / "Focus.Horizon.app.tar.gz.sig").read_text().strip()
+          win_exe = out / "Focus.Horizon_6.0.0_x64-setup.exe"
+          win_sig = (out / "Focus.Horizon_6.0.0_x64-setup.exe.sig").read_text().strip()
+
+          manifest = {
+              "version": "6.0.0",
+              "notes": "Focus Horizon 6.0",
+              "pub_date": "2026-09-29T12:11:36Z",
+              "platforms": {
+                  "darwin-aarch64": {
+                      "signature": mac_sig,
+                      "url": "https://github.com/mateus-gomes-barros/focus-releases/releases/download/v6.0.0/Focus.Horizon.app.tar.gz",
+                  },
+                  "windows-x86_64": {
+                      "signature": win_sig,
+                      "url": "https://github.com/mateus-gomes-barros/focus-releases/releases/download/v6.0.0/Focus.Horizon_6.0.0_x64-setup.exe",
+                  },
+              },
+          }
+          (out / "horizon-latest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
+
+          def digest(p):
+              return hashlib.sha256(p.read_bytes()).hexdigest()
+
+          (out / "horizon-macos-SHA256SUMS.txt").write_text(
+              f"{digest(out / 'Focus.Horizon_6.0.0_aarch64.dmg')}  Focus.Horizon_6.0.0_aarch64.dmg\n"
+              f"{digest(mac_tar)}  Focus.Horizon.app.tar.gz\n"
+              f"{digest(out / 'Focus.Horizon.app.tar.gz.sig')}  Focus.Horizon.app.tar.gz.sig\n"
+          )
+          (out / "SHA256SUMS.txt").write_text(
+              f"{digest(win_exe)}  Focus.Horizon_6.0.0_x64-setup.exe\n"
+              f"{digest(out / 'Focus.Horizon_6.0.0_x64-setup.exe.sig')}  Focus.Horizon_6.0.0_x64-setup.exe.sig\n"
+              f"{digest(out / 'Focus.Horizon_6.0.0_x64_en-US.msi')}  Focus.Horizon_6.0.0_x64_en-US.msi\n"
+              f"{digest(out / 'Focus.Horizon_6.0.0_x64_en-US.msi.sig')}  Focus.Horizon_6.0.0_x64_en-US.msi.sig\n"
+          )
+          PY
+
+          cat out/horizon-latest.json
+          shasum -a 256 out/*
+
+      - name: Publish Horizon 6.0 release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release upload v6.0.0             out/Focus.Horizon_6.0.0_aarch64.dmg             out/Focus.Horizon.app.tar.gz             out/Focus.Horizon.app.tar.gz.sig             out/Focus.Horizon_6.0.0_x64-setup.exe             out/Focus.Horizon_6.0.0_x64-setup.exe.sig             out/Focus.Horizon_6.0.0_x64_en-US.msi             out/Focus.Horizon_6.0.0_x64_en-US.msi.sig             out/SHA256SUMS.txt             out/horizon-macos-SHA256SUMS.txt             out/horizon-latest.json             --clobber
