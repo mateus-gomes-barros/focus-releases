@@ -7,20 +7,20 @@
     "minimumVersionCode": 50003,
     "notes": {
       "en": [
-        "Focus 6.0 is here.",
-        "New Today experience, deeper task and timer integration, FocushoMe improvements and more."
+        "Focus 6.0 hotfix.",
+        "Improved Android timer notification spacing and refined alignment in Today progress metrics."
       ],
       "pt-BR": [
-        "O Focus 6.0 chegou.",
-        "Nova experiência Hoje, integração mais profunda entre tarefas e timer, melhorias no FocushoMe e muito mais."
+        "Hotfix do Focus 6.0.",
+        "Melhoria no espaçamento da notificação do timer no Android e refinamento do alinhamento das métricas em Seu progresso."
       ]
     },
-    "publishedAt": "2026-09-29T12:11:36Z",
+    "publishedAt": "2026-10-01T02:04:16.972Z",
     "releasePageUrl": "https://github.com/mateus-gomes-barros/focus-releases/releases/tag/v6.0.0",
-    "sha256": "bde2787a2da24b8e0375166d0512c7ac1d07113d07e7c3b4e31a0275a19e6aac",
+    "sha256": "a3361d10db889163f8e33c53a67ea246a55831e8069f03b3aff31e06dd97bc05",
     "signingCertificateSha256": "66ef952ba112112325e03a5964f9b3102810cd22f3db50bdce796831cc943dab",
-    "sizeBytes": 4611447,
-    "versionCode": 60000,
+    "sizeBytes": 4611507,
+    "versionCode": 60001,
     "versionName": "6.0.0"
   },
   "packageName": "com.mateusgomes.focusapp",
